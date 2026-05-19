@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Inherit ImportAction to add Preview button -->
+    <t t-inherit="ImportAction" t-inherit-mode="extension">
+        <xpath expr="//button[text()='Test' and hasclass('btn-primary')]" position="after">
+            <button t-if="!state.isTested" type="button" class="btn btn-info ms-1" t-on-click="handlePreviewImport">Preview</button>
+        </xpath>
+        <xpath expr="//button[text()='Test' and hasclass('btn-secondary')]" position="before">
+            <button t-if="!state.isTested" type="button" class="btn btn-info ms-1" t-on-click="handlePreviewImport">Preview</button>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- List View: Import Validation Results -->
+    <!-- ============================================================ -->
+    <record id="view_import_validation_result_list" model="ir.ui.view">
+        <field name="name">import.validation.result.list</field>
+        <field name="model">import.validation.result</field>
+        <field name="arch" type="xml">
+            <list string="Import Validation Results" default_order="create_date desc">
+                <field name="import_date" string="Date"/>
+                <field name="name"/>
+                <field name="model_name" string="Model"/>
+                <field name="file_name"/>
+                <field name="total_rows"/>
+                <field name="success_count"/>
+                <field name="error_count"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state == 'failed'"
+                       decoration-warning="state == 'partial'"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Form View: Import Validation Result Detail -->
+    <!-- ============================================================ -->
+    <record id="view_import_validation_result_form" model="ir.ui.view">
+        <field name="name">import.validation.result.form</field>
+        <field name="model">import.validation.result</field>
+        <field name="arch" type="xml">
+            <form string="Import Validation Result">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="error_report" filename="error_report_filename"
+                               widget="binary" string="Download Error Report"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Import Details">
+                            <field name="res_model"/>
+                            <field name="model_name"/>
+                            <field name="file_name"/>
+                            <field name="import_date"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group string="Results">
+                            <field name="total_rows"/>
+                            <field name="success_count"/>
+                            <field name="error_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Error Details" name="error_details">
+                            <field name="error_data" widget="text" readonly="1"
+                                   placeholder="No errors recorded."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Search View -->
+    <!-- ============================================================ -->
+    <record id="view_import_validation_result_search" model="ir.ui.view">
+        <field name="name">import.validation.result.search</field>
+        <field name="model">import.validation.result</field>
+        <field name="arch" type="xml">
+            <search string="Import Validation Results">
+                <field name="name"/>
+                <field name="res_model"/>
+                <field name="file_name"/>
+                <field name="user_id"/>
+                <filter string="Failed" name="failed"
+                        domain="[('state', '=', 'failed')]"/>
+                <filter string="Partial Success" name="partial"
+                        domain="[('state', '=', 'partial')]"/>
+                <separator/>
+                <filter string="Today" name="today"
+                        domain="[('import_date', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter string="Model" name="group_model"
+                            context="{'group_by': 'res_model'}"/>
+                    <filter string="User" name="group_user"
+                            context="{'group_by': 'user_id'}"/>
+                    <filter string="Status" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Date" name="group_date"
+                            context="{'group_by': 'import_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Action -->
+    <!-- ============================================================ -->
+    <record id="action_import_validation_result" model="ir.actions.act_window">
+        <field name="name">Import Error Logs</field>
+        <field name="res_model">import.validation.result</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_import_validation_result_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No import errors logged yet.
+            </p>
+            <p>
+                Import error logs are automatically created when an import
+                encounters errors. Each log contains row-by-row diagnostics
+                and a downloadable CSV error report.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Menu: Settings → Technical → Import Error Logs -->
+    <!-- ============================================================ -->
+    <menuitem id="menu_import_validation_result"
+              name="Import Error Logs"
+              parent="base.menu_custom"
+              action="action_import_validation_result"
+              sequence="100"/>
+
+</odoo>

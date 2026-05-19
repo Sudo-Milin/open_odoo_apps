@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="enhanced_import_validation.PreviewTable">
+        <div class="o_import_preview_table">
+            <div class="mb-3">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn" t-att-class="state.filter === 'all' ? 'btn-primary' : 'btn-outline-primary'" t-on-click="() => this.setFilter('all')">All Rows</button>
+                    <button type="button" class="btn" t-att-class="state.filter === 'error' ? 'btn-danger' : 'btn-outline-danger'" t-on-click="() => this.setFilter('error')">Errors</button>
+                    <button type="button" class="btn" t-att-class="state.filter === 'create' ? 'btn-success' : 'btn-outline-success'" t-on-click="() => this.setFilter('create')">Creates</button>
+                    <button type="button" class="btn" t-att-class="state.filter === 'update' ? 'btn-info' : 'btn-outline-info'" t-on-click="() => this.setFilter('update')">Updates</button>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Row</th>
+                            <th>Status</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="filteredRows" t-as="row" t-key="row.row">
+                            <td><t t-esc="row.row + 1"/></td>
+                            <td>
+                                <span t-if="row.status === 'CREATE'" class="badge text-bg-success">CREATE</span>
+                                <span t-elif="row.status === 'UPDATE'" class="badge text-bg-info">UPDATE</span>
+                                <span t-elif="row.status === 'ERROR'" class="badge text-bg-danger">ERROR</span>
+                                <span t-else="" class="badge text-bg-secondary"><t t-esc="row.status"/></span>
+                            </td>
+                            <td>
+                                <t t-if="row.errors and row.errors.length > 0">
+                                    <ul class="mb-0 text-danger">
+                                        <li t-foreach="row.errors" t-as="err" t-key="err_index">
+                                            <t t-esc="err.message"/>
+                                            <t t-if="err.field">
+                                                <div class="mt-1 input-group input-group-sm">
+                                                    <span class="input-group-text">Fix Value</span>
+                                                    <input type="text" class="form-control" t-att-value="state.fallbackValues[err.field]?.[err.failed_value || ''] || ''" t-on-change="(e) => this.setFallbackValue(err.field, err.failed_value || '', e.target.value)" placeholder="Enter correct value"/>
+                                                </div>
+                                            </t>
+                                        </li>
+                                    </ul>
+                                </t>
+                                <t t-else="">
+                                    <span class="text-muted">No issues</span>
+                                </t>
+                                
+                                <!-- CSV Raw Data Dropdown / Collapse -->
+                                <div class="mt-2" t-if="row.raw_values">
+                                    <small class="text-muted">CSV Raw Data:</small>
+                                    <div style="font-size: 0.8em; background-color: #f8f9fa; padding: 5px; border-radius: 4px;">
+                                        <t t-foreach="Object.keys(row.raw_values)" t-as="colKey" t-key="colKey">
+                                            <div><strong><t t-esc="colKey"/>:</strong> <t t-esc="row.raw_values[colKey]"/></div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="filteredRows.length === 0">
+                            <td colspan="3" class="text-center text-muted py-3">No rows match the selected filter.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </t>
+</templates>

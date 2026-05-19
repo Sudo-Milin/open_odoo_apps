@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_import_validation_result_user,import.validation.result.user,model_import_validation_result,base.group_user,1,0,1,0
+access_import_validation_result_admin,import.validation.result.admin,model_import_validation_result,base.group_system,1,1,1,1
+access_import_preview_session_user,import.preview.session.user,model_import_preview_session,base.group_user,1,1,1,1
+access_import_preview_wizard_user,import.preview.wizard.user,model_import_preview_wizard,base.group_user,1,1,1,1
