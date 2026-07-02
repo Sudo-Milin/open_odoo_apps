@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="web_media_capture.PermissionPrompt">
+        <div class="o_mc_permission_prompt">
+            <!-- Icon -->
+            <div class="o_mc_permission_icon">
+                <i t-if="isPrompt" class="fa fa-camera"/>
+                <i t-elif="isDenied" class="fa fa-ban"/>
+                <i t-else="" class="fa fa-exclamation-triangle"/>
+            </div>
+
+            <!-- Title -->
+            <h4 class="o_mc_permission_title" t-esc="title"/>
+
+            <!-- Message -->
+            <p class="o_mc_permission_message" t-esc="message"/>
+
+            <!-- Actions -->
+            <div class="o_mc_permission_actions">
+                <!-- Request permission button (prompt state) -->
+                <button t-if="isPrompt"
+                        class="btn btn-primary o_mc_btn_allow"
+                        t-on-click="onRequestPermission"
+                        t-att-disabled="state.requesting"
+                        type="button">
+                    <t t-if="state.requesting">
+                        <i class="fa fa-spinner fa-spin me-1"/>
+                        Requesting…
+                    </t>
+                    <t t-else="">
+                        <i class="fa fa-camera me-1"/>
+                        Allow Camera
+                    </t>
+                </button>
+
+                <!-- File upload fallback (always available) -->
+                <button class="btn btn-outline-secondary o_mc_btn_fallback"
+                        t-on-click="onUploadFallback"
+                        type="button">
+                    <i class="fa fa-upload me-1"/>
+                    Upload Files Instead
+                </button>
+            </div>
+        </div>
+    </t>
+
+</templates>

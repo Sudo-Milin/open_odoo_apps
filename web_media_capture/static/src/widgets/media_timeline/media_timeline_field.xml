@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="web_media_capture.MediaTimelineField">
+        <div class="o_mc_field o_mc_timeline_field">
+
+            <t t-if="groupedByDate.length">
+                <t t-foreach="groupedByDate" t-as="group" t-key="group.date">
+                    <!-- Date header -->
+                    <div class="o_mc_timeline_date_header">
+                        <div class="o_mc_timeline_date_dot"/>
+                        <span class="o_mc_timeline_date_label" t-esc="group.label"/>
+                    </div>
+
+                    <!-- Timeline items -->
+                    <div class="o_mc_timeline_items">
+                        <t t-foreach="group.items" t-as="att" t-key="att.id">
+                            <div t-attf-class="o_mc_timeline_item {{ isExpanded(att.id) ? 'o_mc_expanded' : '' }}"
+                                 t-on-click="() => this.onToggleExpand(att.id)">
+
+                                <div class="o_mc_timeline_line"/>
+
+                                <div class="o_mc_timeline_content">
+                                    <!-- Thumbnail -->
+                                    <div class="o_mc_timeline_thumb">
+                                        <img t-if="_isImage(att.mimetype)"
+                                             t-att-src="_thumbnailUrl(att)"
+                                             t-att-alt="att.name"
+                                             loading="lazy"/>
+                                        <div t-elif="_isVideo(att.mimetype)" class="o_mc_timeline_video_icon">
+                                            <i class="fa fa-video-camera"/>
+                                        </div>
+                                        <div t-else="" class="o_mc_timeline_file_icon">
+                                            <i class="fa fa-file-o"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- Info -->
+                                    <div class="o_mc_timeline_info">
+                                        <span class="o_mc_timeline_name text-truncate" t-esc="att.name"/>
+                                        <div class="o_mc_timeline_meta">
+                                            <span t-if="att.create_date" class="o_mc_timeline_time"
+                                                  t-esc="_formatTime(att.create_date)"/>
+                                            <span t-if="att.create_uid_name" class="o_mc_timeline_user">
+                                                <i class="fa fa-user me-1"/>
+                                                <t t-esc="att.create_uid_name"/>
+                                            </span>
+                                            <span t-if="att.file_size" class="o_mc_timeline_size"
+                                                  t-esc="_fileSizeLabel(att.file_size)"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div class="o_mc_timeline_actions">
+                                        <a t-att-href="'/web/content/' + att.id + '?download=true'"
+                                           class="o_mc_timeline_download" title="Download"
+                                           t-on-click.stop="">
+                                            <i class="fa fa-download"/>
+                                        </a>
+                                        <button t-if="!isReadonly"
+                                                class="o_mc_timeline_delete"
+                                                t-on-click.stop="() => this.onDeleteAttachment(att.id)"
+                                                title="Remove" type="button">
+                                            <i class="fa fa-trash-o"/>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Expanded detail -->
+                                <div t-if="isExpanded(att.id)" class="o_mc_timeline_detail">
+                                    <t t-if="_isImage(att.mimetype)">
+                                        <img t-att-src="'/web/image/' + att.id" t-att-alt="att.name"
+                                             class="o_mc_timeline_detail_img"/>
+                                    </t>
+                                    <t t-if="_isVideo(att.mimetype)">
+                                        <video t-att-src="'/web/content/' + att.id"
+                                               class="o_mc_timeline_detail_video"
+                                               controls="" preload="metadata"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+
+            <!-- Empty state -->
+            <div t-if="!groupedByDate.length" class="o_mc_empty_state">
+                <i class="fa fa-clock-o"/>
+                <span>No media timeline to display</span>
+            </div>
+        </div>
+    </t>
+
+</templates>

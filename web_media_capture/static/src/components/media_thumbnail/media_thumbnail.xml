@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="web_media_capture.MediaThumbnail">
+        <div class="o_mc_thumbnail_wrapper">
+            <div class="o_mc_thumbnail" t-on-click="onClickThumbnail">
+                <!-- Image thumbnail -->
+                <t t-if="isImage">
+                    <img
+                        t-att-src="thumbnailUrl"
+                        t-att-alt="props.attachment.name"
+                        class="o_mc_thumb_img"
+                        loading="lazy"
+                    />
+                </t>
+
+                <!-- Video thumbnail with play overlay -->
+                <t t-if="isVideo">
+                    <div class="o_mc_thumb_video">
+                        <video
+                            t-att-src="videoUrl"
+                            class="o_mc_thumb_img"
+                            preload="metadata"
+                            muted=""
+                        />
+                        <div class="o_mc_play_overlay">
+                            <i class="fa fa-play-circle"/>
+                        </div>
+                    </div>
+                </t>
+
+                <!-- Generic file fallback -->
+                <t t-if="!isImage and !isVideo">
+                    <div class="o_mc_thumb_file">
+                        <i class="fa fa-file-o"/>
+                        <span t-esc="props.attachment.name"/>
+                    </div>
+                </t>
+
+                <!-- Info overlay -->
+                <div class="o_mc_thumb_info">
+                    <span class="o_mc_thumb_name text-truncate" t-esc="props.attachment.name"/>
+                    <span class="o_mc_thumb_size" t-esc="fileSizeLabel"/>
+                </div>
+
+                <!-- Hover actions overlay -->
+                <div class="o_mc_thumb_actions">
+                    <!-- Download button -->
+                    <a t-att-href="downloadUrl"
+                       download=""
+                       class="o_mc_action_btn o_mc_btn_download"
+                       title="Download"
+                       t-on-click.stop="">
+                        <i class="fa fa-download"/>
+                    </a>
+                    <!-- Delete button (edit mode only) -->
+                    <button t-if="!props.readonly"
+                            class="o_mc_action_btn o_mc_btn_delete"
+                            t-on-click="onClickDelete"
+                            title="Remove" type="button">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lightbox Modal -->
+            <div t-if="state.previewOpen" class="o_mc_lightbox" tabindex="0" t-on-keydown="onLightboxKeydown">
+                <div class="o_mc_lightbox_backdrop" t-on-click.stop="onClosePreview"/>
+                <div class="o_mc_lightbox_content">
+                    <button class="o_mc_lightbox_close" t-on-click.stop="onClosePreview" type="button">
+                        <i class="fa fa-times"/>
+                    </button>
+
+                    <!-- Image preview -->
+                    <img t-if="isImage"
+                         t-att-src="videoUrl"
+                         class="o_mc_lightbox_media"
+                         t-att-alt="props.attachment.name"/>
+
+                    <!-- Video player -->
+                    <video t-if="isVideo"
+                           t-att-src="videoUrl"
+                           class="o_mc_lightbox_media"
+                           controls="true"
+                           autoplay="true"
+                           playsinline="true"/>
+
+                    <!-- Generic preview fallback -->
+                    <div t-if="!isImage and !isVideo" class="o_mc_thumb_file" style="width: 200px; height: 200px; border-radius: 8px;">
+                        <i class="fa fa-file-o" style="font-size: 64px;"/>
+                        <span t-esc="props.attachment.name" style="font-size: 14px; margin-top: 10px;"/>
+                    </div>
+
+                    <!-- Lightbox caption -->
+                    <div class="o_mc_lightbox_caption">
+                        <span t-esc="props.attachment.name"/>
+                        <span class="o_mc_lightbox_counter" t-esc="fileSizeLabel"/>
+                        <a t-att-href="downloadUrl" download="" class="btn btn-outline-light btn-sm ml-2">
+                            <i class="fa fa-download"/> Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

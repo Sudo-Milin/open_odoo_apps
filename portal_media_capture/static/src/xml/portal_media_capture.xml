@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="portal_media_capture.PortalMediaCapture">
+        <div class="o_portal_media_capture">
+            <!-- Header -->
+            <div class="o_portal_mc_header">
+                <h4><i class="fa fa-camera"/> Media Attachments</h4>
+            </div>
+
+            <!-- Viewfinder / Camera preview -->
+            <div t-if="state.cameraOpen" class="o_portal_mc_camera_container">
+                <button class="o_portal_mc_close_camera" t-on-click="closeCamera" title="Close Camera">
+                    <i class="fa fa-times"/>
+                </button>
+                <CameraPreview
+                    photo="true"
+                    video="true"
+                    imageQuality="1"
+                    maxDimension="1920"
+                    onCapture.bind="onCapturePhoto"
+                    onRecordingComplete.bind="onRecordingComplete"
+                    onClose.bind="closeCamera"
+                />
+            </div>
+
+            <!-- Main Actions -->
+            <div class="o_portal_mc_actions" t-if="!state.cameraOpen">
+                <button class="btn btn-portal-action btn-capture" t-on-click="openCamera">
+                    <i class="fa fa-camera"/> Capture Image/Video
+                </button>
+                <label class="btn btn-portal-action btn-upload mb-0">
+                    <i class="fa fa-upload"/> Upload Files
+                    <input type="file" class="d-none" multiple="true" accept="image/*,video/*" t-on-change="onFileSelected"/>
+                </label>
+            </div>
+
+            <!-- Uploading Progress Cards -->
+            <div t-if="state.uploadingFiles.length > 0" class="d-flex flex-column gap-2 mb-3">
+                <div t-foreach="state.uploadingFiles" t-as="file" t-key="file.id" class="o_portal_mc_progress_card">
+                    <div class="o_portal_mc_progress_info">
+                        <span class="name" t-out="file.name"/>
+                        <span class="percent" t-out="file.progress + '%'"/>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" t-att-style="'width: ' + file.progress + '%'"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Existing attachments grid -->
+            <div class="o_portal_mc_grid" t-if="state.attachments.length > 0">
+                <t t-foreach="state.attachments" t-as="att" t-key="att.id">
+                    <MediaThumbnail
+                        attachment="att"
+                        readonly="false"
+                        onDelete.bind="onDeleteAttachment"
+                        onClick.bind="onClickThumbnail"
+                    />
+                </t>
+            </div>
+            <div t-else="" class="text-muted text-center py-4" t-if="state.uploadingFiles.length == 0">
+                No attachments uploaded yet. Capture or upload media files.
+            </div>
+
+            <!-- Lightbox / Modal -->
+            <div t-if="state.previewAttachment" class="o_portal_mc_lightbox" t-on-keydown="onLightboxKeydown" tabindex="0">
+                <button class="o_portal_mc_lightbox_close" t-on-click="closeLightbox" title="Close Lightbox">
+                    <i class="fa fa-times"/>
+                </button>
+                
+                <button class="o_portal_mc_lightbox_nav prev" t-on-click="onPrevMedia" title="Previous Media" t-if="state.attachments.length &gt; 1">
+                    <i class="fa fa-chevron-left"/>
+                </button>
+                
+                <div class="o_portal_mc_lightbox_content">
+                    <t t-if="isPreviewImage">
+                        <img class="o_portal_mc_lightbox_media" t-att-src="previewUrl" alt="Media Preview"/>
+                    </t>
+                    <t t-if="isPreviewVideo">
+                        <video class="o_portal_mc_lightbox_media" t-att-src="previewUrl" controls="true" autoplay="true"/>
+                    </t>
+                    <div class="o_portal_mc_lightbox_caption">
+                        <span t-out="state.previewAttachment.name"/>
+                    </div>
+                </div>
+                
+                <button class="o_portal_mc_lightbox_nav next" t-on-click="onNextMedia" title="Next Media" t-if="state.attachments.length &gt; 1">
+                    <i class="fa fa-chevron-right"/>
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>

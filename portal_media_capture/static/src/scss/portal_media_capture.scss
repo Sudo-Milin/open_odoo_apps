@@ -1,0 +1,278 @@
+.o_portal_media_capture {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    margin-bottom: 32px;
+
+    .o_portal_mc_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #f1f5f9;
+        padding-bottom: 12px;
+
+        h4 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            i {
+                color: #7c4dff;
+            }
+        }
+    }
+
+    .o_portal_mc_actions {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+
+        .btn-portal-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+
+            &.btn-capture {
+                background: #7c4dff;
+                border: 1px solid #7c4dff;
+                color: #ffffff;
+
+                &:hover {
+                    background: #651fff;
+                    border-color: #651fff;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 12px rgba(124, 77, 255, 0.2);
+                }
+            }
+
+            &.btn-upload {
+                background: #f8fafc;
+                border: 1px solid #cbd5e1;
+                color: #475569;
+
+                &:hover {
+                    background: #f1f5f9;
+                    border-color: #94a3b8;
+                    color: #1e293b;
+                    transform: translateY(-1px);
+                }
+            }
+        }
+    }
+
+    /* Grid layout */
+    .o_portal_mc_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+    }
+
+    /* Camera Viewfinder Overlay */
+    .o_portal_mc_camera_container {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #000;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+        /* Let the CameraPreview fill the container width naturally */
+        .o_mc_camera_preview {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            overflow: hidden;
+        }
+
+        /* Video feed: always visible with a guaranteed minimum size */
+        .o_mc_video_feed {
+            width: 100% !important;
+            min-height: 280px;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            display: block !important;
+            border-radius: 0 !important;
+            background: #000;
+        }
+
+        .o_portal_mc_close_camera {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+
+            &:hover {
+                background: rgba(239, 68, 68, 0.9);
+            }
+        }
+    }
+
+    /* Custom upload progress indicator */
+    .o_portal_mc_progress_card {
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .o_portal_mc_progress_info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #64748b;
+
+            span.name {
+                font-weight: 500;
+                color: #334155;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 70%;
+            }
+        }
+
+        .progress {
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            background-color: #e2e8f0;
+
+            .progress-bar {
+                background-color: #7c4dff;
+                transition: width 0.1s ease;
+            }
+        }
+    }
+
+    /* Lightbox Modal */
+    .o_portal_mc_lightbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        z-index: 1050;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        outline: none;
+
+        .o_portal_mc_lightbox_close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+
+            &:hover {
+                background: rgba(239, 68, 68, 0.9);
+                transform: rotate(90deg);
+            }
+        }
+
+        .o_portal_mc_lightbox_nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: #fff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.15);
+                transform: translateY(-50%) scale(1.05);
+            }
+
+            &.prev {
+                left: 32px;
+            }
+
+            &.next {
+                right: 32px;
+            }
+        }
+
+        .o_portal_mc_lightbox_content {
+            max-width: 80%;
+            max-height: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+
+            .o_portal_mc_lightbox_media {
+                max-width: 100%;
+                max-height: 70vh;
+                object-fit: contain;
+                border-radius: 8px;
+                box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+            }
+
+            .o_portal_mc_lightbox_caption {
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 1rem;
+                font-weight: 500;
+                text-align: center;
+                background: rgba(0, 0, 0, 0.6);
+                padding: 8px 16px;
+                border-radius: 20px;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+}

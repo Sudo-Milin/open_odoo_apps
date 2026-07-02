@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="web_media_capture.MediaCaptureField">
+        <div t-attf-class="o_mc_field o_mc_capture_field {{ state.isDragging ? 'o_mc_drag_over' : '' }}"
+             t-on-dragover="onDragOver"
+             t-on-dragleave="onDragLeave"
+             t-on-drop="onDrop">
+
+            <!-- Existing attachments grid -->
+            <!-- <div t-if="attachments.length" class="o_mc_attachments_grid">
+                <t t-foreach="attachments" t-as="att" t-key="att.id">
+                    <MediaThumbnail
+                        attachment="att"
+                        readonly="isReadonly"
+                        onDelete.bind="onDeleteAttachment"
+                    />
+                </t>
+            </div> -->
+
+            <!-- Upload / Capture controls (edit mode only) -->
+            <t t-if="!isReadonly and canAddMore">
+
+                <!-- Camera preview (inline) -->
+                <t t-if="showCamera">
+                    <CameraPreview
+                        photo="props.photo !== false"
+                        video="props.video"
+                        maxDuration="props.maxDuration"
+                        imageQuality="props.imageQuality"
+                        maxDimension="props.maxDimension"
+                        onCapture.bind="onCapture"
+                        onRecordingComplete.bind="onRecordingComplete"
+                        onClose.bind="onCloseCamera"
+                    />
+                </t>
+
+                <!-- Permission prompt -->
+                <t t-if="showPermissionPrompt">
+                    <PermissionPrompt
+                        status="state.permissionStatus"
+                        onGranted.bind="onPermissionGranted"
+                        onFallback.bind="onPermissionFallback"
+                    />
+                </t>
+
+                <!-- Uploading indicator -->
+                <div t-if="isUploading" class="o_mc_uploading">
+                    <div class="o_mc_spinner"/>
+                    <span>Uploading…</span>
+                </div>
+
+                <!-- Action buttons (idle / file_fallback state) -->
+                <div t-if="state.mode === 'idle' or state.mode === 'file_fallback'"
+                     class="o_mc_actions">
+                    <!-- Camera button -->
+                    <button class="btn btn-primary o_mc_btn_open_camera"
+                            t-on-click="onOpenCamera" type="button">
+                        <i class="fa fa-camera me-1"/>
+                    </button>
+
+                    <!-- File upload button -->
+                    <button class="btn btn-outline-secondary o_mc_btn_upload"
+                            t-on-click="onClickUpload" type="button">
+                        <i class="fa fa-upload me-1"/>
+                    </button>
+
+                    <!-- Drop zone hint -->
+                    <div class="o_mc_drop_hint">
+                        <i class="fa fa-cloud-upload"/>
+                        <span>or drag &amp; drop files here</span>
+                    </div>
+                </div>
+
+                <!-- Hidden file input -->
+                <input t-ref="fileInput"
+                       type="file"
+                       class="d-none"
+                       t-att-accept="'image/*,video/*'"
+                       t-att-multiple="props.multiple !== false ? 'multiple' : undefined"
+                       t-on-change="onFileSelected"/>
+            </t>
+
+            <!-- Empty state (readonly, no attachments) -->
+            <div t-if="isReadonly and !attachments.length" class="o_mc_empty_state">
+                <i class="fa fa-image"/>
+                <span>No media captured</span>
+            </div>
+        </div>
+    </t>
+
+</templates>

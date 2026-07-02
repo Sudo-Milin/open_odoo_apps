@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="web_media_capture.MediaGalleryField">
+        <div class="o_mc_field o_mc_gallery_field">
+
+            <!-- Gallery grid -->
+            <div t-if="attachments.length" class="o_mc_gallery_grid">
+                <t t-foreach="attachments" t-as="att" t-key="att.id">
+                    <div class="o_mc_gallery_item">
+                        <MediaThumbnail
+                            attachment="att"
+                            readonly="isReadonly"
+                            onDelete.bind="onDeleteAttachment"
+                            onClick.bind="onClickThumbnail"
+                        />
+                    </div>
+                </t>
+            </div>
+
+            <!-- Empty state -->
+            <div t-if="!attachments.length" class="o_mc_empty_state">
+                <i class="fa fa-images"/>
+                <span>No media to display</span>
+            </div>
+
+            <!-- Lightbox modal -->
+            <div t-if="state.lightboxOpen" class="o_mc_lightbox"
+                 t-on-keydown="onLightboxKeydown" tabindex="0">
+                <div class="o_mc_lightbox_backdrop" t-on-click="onCloseLightbox"/>
+
+                <div class="o_mc_lightbox_content">
+                    <!-- Close button -->
+                    <button class="o_mc_lightbox_close" t-on-click="onCloseLightbox" type="button">
+                        <i class="fa fa-times"/>
+                    </button>
+
+                    <!-- Navigation arrows -->
+                    <button t-if="hasPrev" class="o_mc_lightbox_nav o_mc_lightbox_prev"
+                            t-on-click="onPrev" type="button">
+                        <i class="fa fa-chevron-left"/>
+                    </button>
+                    <button t-if="hasNext" class="o_mc_lightbox_nav o_mc_lightbox_next"
+                            t-on-click="onNext" type="button">
+                        <i class="fa fa-chevron-right"/>
+                    </button>
+
+                    <!-- Image -->
+                    <img t-if="!lightboxIsVideo"
+                         t-att-src="lightboxUrl"
+                         t-att-alt="currentLightboxAttachment.name"
+                         class="o_mc_lightbox_media"/>
+
+                    <!-- Video -->
+                    <video t-if="lightboxIsVideo"
+                           t-att-src="lightboxUrl"
+                           class="o_mc_lightbox_media"
+                           controls=""
+                           autoplay=""/>
+
+                    <!-- Caption -->
+                    <div class="o_mc_lightbox_caption">
+                        <span t-esc="currentLightboxAttachment.name"/>
+                        <span class="o_mc_lightbox_counter">
+                            <t t-esc="state.lightboxIndex + 1"/> / <t t-esc="attachments.length"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

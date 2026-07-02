@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="web_media_capture.CameraPreview">
+        <div class="o_mc_camera_preview">
+            <!-- Flash overlay -->
+            <div t-attf-class="o_mc_flash {{ state.flashActive ? 'o_mc_flash_active' : '' }}"/>
+
+            <video
+                t-ref="video"
+                class="o_mc_video_feed"
+                autoplay=""
+                playsinline=""
+                muted=""
+                t-att-class="{ 'o_mc_mirror': state.isMirrored }"
+            />
+
+            <!-- Loading overlay -->
+            <div t-if="!state.isReady" class="o_mc_loading_overlay">
+                <div class="o_mc_spinner"/>
+                <span>Starting camera…</span>
+            </div>
+
+            <!-- Recording indicator -->
+            <div t-if="state.isRecording" class="o_mc_recording_indicator">
+                <span class="o_mc_rec_dot"/>
+                <span class="o_mc_rec_time" t-esc="formattedTime"/>
+            </div>
+
+            <!-- Controls bar -->
+            <div class="o_mc_controls" t-if="state.isReady">
+                <!-- Close button -->
+                <button class="o_mc_btn o_mc_btn_close" t-on-click="onClose"
+                        title="Close camera" type="button">
+                    <i class="fa fa-times"/>
+                </button>
+
+                <!-- Camera switch -->
+                <button t-if="hasMultipleCameras"
+                        class="o_mc_btn o_mc_btn_switch" t-on-click="onSwitchCamera"
+                        title="Switch camera" type="button">
+                    <i class="fa fa-refresh"/>
+                </button>
+
+                <!-- Photo capture -->
+                <button t-if="showPhotoButton"
+                        class="o_mc_btn o_mc_btn_capture" t-on-click="onCapturePhoto"
+                        title="Take photo" type="button">
+                    <div class="o_mc_shutter_ring">
+                        <div class="o_mc_shutter_inner"/>
+                    </div>
+                </button>
+
+                <!-- Video record / stop -->
+                <button t-if="showVideoButton"
+                        t-attf-class="o_mc_btn o_mc_btn_record {{ state.isRecording ? 'o_mc_recording' : '' }}"
+                        t-on-click="onToggleRecording"
+                        t-att-title="state.isRecording ? 'Stop recording' : 'Start recording'"
+                        type="button">
+                    <div class="o_mc_record_ring">
+                        <div t-attf-class="o_mc_record_inner {{ state.isRecording ? 'o_mc_record_stop' : '' }}"/>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </t>
+
+</templates>

@@ -1,0 +1,823 @@
+// =============================================================================
+// Web Media Capture — Styles
+// =============================================================================
+// All styles scoped under .o_mc_ prefix to avoid conflicts.
+
+// ---------------------------------------------------------------------------
+// Design tokens
+// ---------------------------------------------------------------------------
+
+$mc-radius: 8px;
+$mc-radius-lg: 12px;
+$mc-bg: var(--o-webclient-background-color, #fff);
+$mc-border: var(--o-webclient-border-color, #dee2e6);
+$mc-primary: var(--o-main-color, #714b67);
+$mc-danger: #dc3545;
+$mc-overlay: rgba(0, 0, 0, 0.6);
+$mc-transition: 0.2s ease;
+$mc-thumb-size: 120px;
+$mc-thumb-size-sm: 80px;
+
+// ---------------------------------------------------------------------------
+// Field container
+// ---------------------------------------------------------------------------
+
+.o_mc_field {
+    position: relative;
+    width: 100%;
+}
+
+// ---------------------------------------------------------------------------
+// Attachments grid
+// ---------------------------------------------------------------------------
+
+.o_mc_attachments_grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+// ---------------------------------------------------------------------------
+// Thumbnail card
+// ---------------------------------------------------------------------------
+
+.o_mc_thumbnail {
+    position: relative;
+    width: $mc-thumb-size;
+    height: $mc-thumb-size;
+    border-radius: $mc-radius;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid $mc-border;
+    transition: transform $mc-transition, box-shadow $mc-transition;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+        .o_mc_thumb_info {
+            opacity: 1;
+        }
+        .o_mc_thumb_actions {
+            opacity: 1;
+        }
+    }
+}
+
+.o_mc_thumb_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.o_mc_thumb_video {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.o_mc_play_overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+
+    .fa {
+        font-size: 32px;
+        color: #fff;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.o_mc_thumb_file {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    padding: 8px;
+
+    .fa {
+        font-size: 28px;
+        color: #868e96;
+        margin-bottom: 4px;
+    }
+
+    span {
+        font-size: 10px;
+        color: #868e96;
+        text-align: center;
+        word-break: break-all;
+    }
+}
+
+.o_mc_thumb_info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 4px 6px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    color: #fff;
+    font-size: 10px;
+    opacity: 0;
+    transition: opacity $mc-transition;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.o_mc_thumb_name {
+    max-width: 70%;
+}
+
+.o_mc_thumb_size {
+    opacity: 0.8;
+}
+
+.o_mc_thumb_actions {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity $mc-transition;
+    z-index: 5;
+}
+
+.o_mc_action_btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    color: #fff !important;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none !important;
+    transition: background $mc-transition, transform $mc-transition;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.o_mc_btn_download {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    
+    &:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
+}
+
+.o_mc_btn_delete {
+    background: $mc-danger;
+    
+    &:hover {
+        background: darken($mc-danger, 10%);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Camera preview
+// ---------------------------------------------------------------------------
+
+.o_mc_camera_preview {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    border-radius: $mc-radius-lg;
+    overflow: hidden;
+    background: #000;
+    margin-bottom: 12px;
+}
+
+.o_mc_video_feed {
+    width: 100%;
+    display: block;
+    border-radius: $mc-radius-lg;
+
+    &.o_mc_mirror {
+        transform: scaleX(-1);
+    }
+}
+
+// Flash effect
+.o_mc_flash {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.15s ease;
+
+    &.o_mc_flash_active {
+        opacity: 0.8;
+        transition: opacity 0s;
+    }
+}
+
+// Loading overlay
+.o_mc_loading_overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    gap: 8px;
+    z-index: 5;
+}
+
+// Spinner
+.o_mc_spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: mc-spin 0.8s linear infinite;
+}
+
+@keyframes mc-spin {
+    to { transform: rotate(360deg); }
+}
+
+// Recording indicator
+.o_mc_recording_indicator {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 5;
+}
+
+.o_mc_rec_dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: $mc-danger;
+    animation: mc-pulse 1s ease-in-out infinite;
+}
+
+@keyframes mc-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.o_mc_rec_time {
+    font-variant-numeric: tabular-nums;
+}
+
+// Camera controls
+.o_mc_controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+    z-index: 5;
+}
+
+.o_mc_btn {
+    border: none;
+    background: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform $mc-transition;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+.o_mc_btn_close,
+.o_mc_btn_switch {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    font-size: 16px;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+}
+
+// Shutter button
+.o_mc_btn_capture {
+    .o_mc_shutter_ring {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+    }
+    .o_mc_shutter_inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 0.1s ease;
+    }
+
+    &:active .o_mc_shutter_inner {
+        transform: scale(0.85);
+    }
+}
+
+// Record button
+.o_mc_btn_record {
+    .o_mc_record_ring {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+    }
+    .o_mc_record_inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: $mc-danger;
+        transition: border-radius 0.2s ease, width 0.2s ease, height 0.2s ease;
+    }
+    .o_mc_record_stop {
+        border-radius: 4px;
+        width: 28px;
+        height: 28px;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Action buttons area
+// ---------------------------------------------------------------------------
+
+.o_mc_actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+}
+
+.o_mc_drop_hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #868e96;
+    font-size: 13px;
+
+    .fa {
+        font-size: 16px;
+    }
+}
+
+// Drag over highlight
+.o_mc_drag_over {
+    outline: 2px dashed $mc-primary;
+    outline-offset: -2px;
+    border-radius: $mc-radius;
+    background: rgba(113, 75, 103, 0.05);
+}
+
+// Uploading state
+.o_mc_uploading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    color: #868e96;
+}
+
+// ---------------------------------------------------------------------------
+// Empty state
+// ---------------------------------------------------------------------------
+
+.o_mc_empty_state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #adb5bd;
+    gap: 8px;
+
+    .fa {
+        font-size: 32px;
+    }
+    span {
+        font-size: 13px;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Permission prompt
+// ---------------------------------------------------------------------------
+
+.o_mc_permission_prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 32px 16px;
+    border: 1px dashed $mc-border;
+    border-radius: $mc-radius-lg;
+    background: #f8f9fa;
+    margin-bottom: 12px;
+}
+
+.o_mc_permission_icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(113, 75, 103, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+
+    .fa {
+        font-size: 24px;
+        color: $mc-primary;
+    }
+
+    .fa-ban {
+        color: $mc-danger;
+    }
+    .fa-exclamation-triangle {
+        color: #ffc107;
+    }
+}
+
+.o_mc_permission_title {
+    margin-bottom: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.o_mc_permission_message {
+    color: #6c757d;
+    font-size: 13px;
+    max-width: 400px;
+    margin-bottom: 16px;
+}
+
+.o_mc_permission_actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+// ---------------------------------------------------------------------------
+// Gallery widget
+// ---------------------------------------------------------------------------
+
+.o_mc_gallery_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+
+    .o_mc_gallery_item {
+        cursor: pointer;
+
+        .o_mc_thumbnail {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%; // 1:1 aspect ratio
+        }
+
+        .o_mc_thumb_img,
+        .o_mc_thumb_video {
+            position: absolute;
+            inset: 0;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Lightbox
+// ---------------------------------------------------------------------------
+
+.o_mc_lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}
+
+.o_mc_lightbox_backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.o_mc_lightbox_content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+}
+
+.o_mc_lightbox_media {
+    max-width: 90vw;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: $mc-radius;
+}
+
+.o_mc_lightbox_close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    opacity: 0.7;
+    transition: opacity $mc-transition;
+
+    &:hover { opacity: 1; }
+}
+
+.o_mc_lightbox_nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #fff;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background $mc-transition;
+    z-index: 2;
+
+    &:hover { background: rgba(255, 255, 255, 0.3); }
+}
+
+.o_mc_lightbox_prev { left: -60px; }
+.o_mc_lightbox_next { right: -60px; }
+
+.o_mc_lightbox_caption {
+    margin-top: 12px;
+    color: #fff;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    .o_mc_lightbox_counter {
+        opacity: 0.6;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Timeline widget
+// ---------------------------------------------------------------------------
+
+.o_mc_timeline_field {
+    padding: 8px 0;
+}
+
+.o_mc_timeline_date_header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    margin-top: 16px;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+.o_mc_timeline_date_dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: $mc-primary;
+    flex-shrink: 0;
+}
+
+.o_mc_timeline_date_label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #495057;
+}
+
+.o_mc_timeline_items {
+    margin-left: 5px;
+    border-left: 2px solid #dee2e6;
+    padding-left: 20px;
+}
+
+.o_mc_timeline_item {
+    position: relative;
+    margin-bottom: 8px;
+    cursor: pointer;
+
+    &:hover .o_mc_timeline_content {
+        background: #f8f9fa;
+    }
+}
+
+.o_mc_timeline_line {
+    position: absolute;
+    left: -22px;
+    top: 16px;
+    width: 10px;
+    height: 2px;
+    background: #dee2e6;
+}
+
+.o_mc_timeline_content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: $mc-radius;
+    transition: background $mc-transition;
+}
+
+.o_mc_timeline_thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f1f3f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .fa {
+        font-size: 20px;
+        color: #868e96;
+    }
+}
+
+.o_mc_timeline_info {
+    flex: 1;
+    min-width: 0;
+}
+
+.o_mc_timeline_name {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #212529;
+}
+
+.o_mc_timeline_meta {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: #868e96;
+    margin-top: 2px;
+}
+
+.o_mc_timeline_actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-shrink: 0;
+
+    a, button {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background: none;
+        color: #868e96;
+        cursor: pointer;
+        transition: background $mc-transition, color $mc-transition;
+        padding: 0;
+
+        &:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+    }
+
+    .o_mc_timeline_delete:hover {
+        color: $mc-danger;
+    }
+}
+
+.o_mc_timeline_detail {
+    padding: 8px 0 8px 58px;
+
+    img, video {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: $mc-radius;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Responsive
+// ---------------------------------------------------------------------------
+
+@media (max-width: 576px) {
+    .o_mc_thumbnail {
+        width: $mc-thumb-size-sm;
+        height: $mc-thumb-size-sm;
+    }
+
+    .o_mc_camera_preview {
+        max-width: 100%;
+        border-radius: $mc-radius;
+    }
+
+    .o_mc_controls {
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .o_mc_btn_capture .o_mc_shutter_ring,
+    .o_mc_btn_record .o_mc_record_ring {
+        width: 52px;
+        height: 52px;
+    }
+
+    .o_mc_gallery_grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+    .o_mc_lightbox_prev { left: 8px; }
+    .o_mc_lightbox_next { right: 8px; }
+    .o_mc_lightbox_close { top: 8px; right: 8px; }
+
+    .o_mc_timeline_detail {
+        padding-left: 0;
+    }
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_media_capture" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.media.capture</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Media Capture" name="web_media_capture" data-key="web_media_capture" data-string="Media Capture" logo="/web_media_capture/static/description/icon.png">
+                    <block title="Media Capture Settings" name="media_capture_settings">
+                        <setting
+                            string="File Size Limit"
+                            help="Maximum allowed file size for media uploads.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="media_capture_max_file_size" class="col-lg-3 o_light_label"/>
+                                    <field name="media_capture_max_file_size" class="col-lg-2"/>
+                                    <span class="ms-1">MB</span>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting
+                            string="Video Duration Limit"
+                            help="Maximum recording duration for captured videos.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="media_capture_max_duration" class="col-lg-3 o_light_label"/>
+                                    <field name="media_capture_max_duration" class="col-lg-2"/>
+                                    <span class="ms-1">seconds</span>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting
+                            string="Image Quality"
+                            help="JPEG compression quality. Higher values produce better quality but larger files.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="media_capture_image_quality" class="col-lg-3 o_light_label"/>
+                                    <field name="media_capture_image_quality" class="col-lg-2"/>
+                                    <span class="ms-1">%</span>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting
+                            string="Max Image Dimension"
+                            help="Images wider or taller than this are automatically resized before upload.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="media_capture_max_dimension" class="col-lg-3 o_light_label"/>
+                                    <field name="media_capture_max_dimension" class="col-lg-2"/>
+                                    <span class="ms-1">px</span>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting
+                            string="Allowed File Types"
+                            help="Comma-separated list of MIME types that are accepted for media uploads.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="media_capture_allowed_mimetypes" class="col-lg-3 o_light_label"/>
+                                    <field name="media_capture_allowed_mimetypes" class="col-lg-6"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
